@@ -37,11 +37,11 @@ export const TruckLogForm: React.FC = () => {
   const quantity = watch('quantity');
   const rate = watch('rate');
 
-  // Compute total in real-time on frontend level
+  // Compute total in real-time on frontend level (₹ Rupees)
   const numQuantity = parseFloat(String(quantity || 0));
   const numRate = parseFloat(String(rate || 0));
   const computedTotal = !isNaN(numQuantity) && !isNaN(numRate) && numQuantity > 0 && numRate > 0
-    ? (numQuantity * numRate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    ? (numQuantity * numRate).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     : null;
 
   const onSubmit = (data: TruckLogFormData) => {
@@ -82,7 +82,7 @@ export const TruckLogForm: React.FC = () => {
                 Weighbridge
               </span>
             </div>
-            <p className="text-[11px] sm:text-xs text-[#71817E] truncate">Vehicle & payload dispatched/received</p>
+            <p className="text-[11px] sm:text-xs text-[#71817E] truncate">Fleet material weight & logistics recording</p>
           </div>
         </div>
         <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-[#e9f2ef] text-[#234D42] border border-[#d2ded8] shrink-0">
@@ -107,7 +107,7 @@ export const TruckLogForm: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4 sm:mt-6 space-y-3.5 sm:space-y-4">
         <Input
           label="Driver Name"
-          placeholder="e.g. Ramesh Singh"
+          placeholder="e.g. Ramesh Kumar"
           required
           error={errors.driverName?.message}
           {...register('driverName')}
@@ -115,7 +115,7 @@ export const TruckLogForm: React.FC = () => {
 
         <Input
           label="Vehicle Number"
-          placeholder="e.g. DL-01-AB-1234"
+          placeholder="e.g. MH-12-AB-1234"
           required
           error={errors.vehicleNumber?.message}
           {...register('vehicleNumber')}
@@ -123,9 +123,8 @@ export const TruckLogForm: React.FC = () => {
 
         <Input
           label="Material"
-          placeholder="e.g. Recycled PET Flakes, HDPE Regrind"
+          placeholder="e.g. Recycled HDPE Granules"
           required
-          helperText="Auto-resolved in database lookup table"
           error={errors.material?.message}
           {...register('material')}
         />
@@ -133,24 +132,24 @@ export const TruckLogForm: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <QuantityField
             label="Quantity"
-            placeholder="e.g. 15.5"
+            placeholder="e.g. 15"
             required
             error={errors.quantity?.message}
             quantityProps={register('quantity')}
             unitProps={register('quantityUnit')}
           />
           <Input
-            label="Rate (₹ / $)"
+            label="Rate (₹)"
             type="number"
             step="any"
-            placeholder="e.g. 450"
+            placeholder="e.g. 45"
             required
             error={errors.rate?.message}
             {...register('rate')}
           />
         </div>
 
-        {/* Live Computed Total Field */}
+        {/* Live Computed Total Field in Rupees */}
         <div className="p-3.5 sm:p-4 rounded-2xl bg-[#f8faf9] border border-[#d2ded8] flex items-center justify-between transition-all duration-300 ease-out hover:border-[#234D42]/40 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#71817E]">
             <Calculator className="w-4 h-4 text-[#234D42] shrink-0" />
@@ -159,7 +158,7 @@ export const TruckLogForm: React.FC = () => {
           <div className="text-right">
             {computedTotal ? (
               <span className="text-sm sm:text-base font-extrabold text-[#234D42] animate-pop-in inline-block">
-                ₹ / $ {computedTotal}
+                ₹ {computedTotal}
               </span>
             ) : (
               <span className="text-[11px] sm:text-xs text-[#AAB6AE] italic">

@@ -37,11 +37,11 @@ export const IncomingReportForm: React.FC = () => {
   const quantity = watch('quantity');
   const price = watch('price');
 
-  // Compute total in real-time on frontend level
+  // Compute total in real-time on frontend level in Rupees (₹)
   const numQuantity = parseFloat(String(quantity || 0));
   const numPrice = parseFloat(String(price || 0));
   const computedTotal = !isNaN(numQuantity) && !isNaN(numPrice) && numQuantity > 0 && numPrice > 0
-    ? (numQuantity * numPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    ? (numQuantity * numPrice).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     : null;
 
   const onSubmit = (data: IncomingReportFormData) => {
@@ -124,7 +124,7 @@ export const IncomingReportForm: React.FC = () => {
             unitProps={register('quantityUnit')}
           />
           <Input
-            label="Price (₹ / $)"
+            label="Price (₹)"
             type="number"
             step="any"
             placeholder="e.g. 1200"
@@ -134,7 +134,7 @@ export const IncomingReportForm: React.FC = () => {
           />
         </div>
 
-        {/* Live Computed Total Field */}
+        {/* Live Computed Total Field in Rupees */}
         <div className="p-3.5 sm:p-4 rounded-2xl bg-[#f8faf9] border border-[#d2ded8] flex items-center justify-between transition-all duration-300 ease-out hover:border-[#234D42]/40 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#71817E]">
             <Calculator className="w-4 h-4 text-[#234D42] shrink-0" />
@@ -143,7 +143,7 @@ export const IncomingReportForm: React.FC = () => {
           <div className="text-right">
             {computedTotal ? (
               <span className="text-sm sm:text-base font-extrabold text-[#234D42] animate-pop-in inline-block">
-                ₹ / $ {computedTotal}
+                ₹ {computedTotal}
               </span>
             ) : (
               <span className="text-[11px] sm:text-xs text-[#AAB6AE] italic">

@@ -59,7 +59,7 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
   if (type === 'truck_log') {
     const qty = Number(details.quantity) || 0;
     const rate = Number(details.rate) || 0;
-    const computedTotal = (qty * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const computedTotal = (qty * rate).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     return (
       <div className="animate-slide-down bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out">
@@ -96,11 +96,11 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
           </div>
           <div>
             <span className="text-[#71817E] block text-[10px] sm:text-[11px] font-medium">Rate</span>
-            <span className="text-[#1a2522] font-semibold text-xs sm:text-sm">${details.rate}</span>
+            <span className="text-[#1a2522] font-semibold text-xs sm:text-sm">₹{details.rate}</span>
           </div>
           <div className="col-span-2 sm:col-span-1 bg-[#f8faf9] p-2 rounded-xl border border-[#d2ded8]">
             <span className="text-[#71817E] block text-[9px] sm:text-[10px] font-bold uppercase">Total Cost</span>
-            <span className="text-[#234D42] font-extrabold text-xs sm:text-sm">₹ / $ {computedTotal}</span>
+            <span className="text-[#234D42] font-extrabold text-xs sm:text-sm">₹ {computedTotal}</span>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
   // incoming_report
   const qty = Number(details.quantity) || 0;
   const price = Number(details.price) || 0;
-  const computedTotal = (qty * price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const computedTotal = (qty * price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
     <div className="animate-slide-down bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out">
@@ -147,11 +147,11 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
         </div>
         <div>
           <span className="text-[#71817E] block text-[10px] sm:text-[11px] font-medium">Price</span>
-          <span className="text-[#1a2522] font-semibold text-xs sm:text-sm">${details.price}</span>
+          <span className="text-[#1a2522] font-semibold text-xs sm:text-sm">₹{details.price}</span>
         </div>
         <div className="col-span-2 sm:col-span-1 bg-[#f8faf9] p-2 rounded-xl border border-[#d2ded8]">
           <span className="text-[#71817E] block text-[9px] sm:text-[10px] font-bold uppercase">Total Value</span>
-          <span className="text-[#234D42] font-extrabold text-xs sm:text-sm">₹ / $ {computedTotal}</span>
+          <span className="text-[#234D42] font-extrabold text-xs sm:text-sm">₹ {computedTotal}</span>
         </div>
       </div>
     </div>

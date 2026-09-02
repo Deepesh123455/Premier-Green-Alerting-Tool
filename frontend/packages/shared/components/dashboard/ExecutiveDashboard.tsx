@@ -508,7 +508,7 @@ export const ExecutiveDashboard: React.FC = () => {
                         const isTruck = item.type === 'truck_log';
                         const qty = Number(item.details.quantity) || 0;
                         const rate = Number(isTruck ? item.details.rate : item.details.price) || 0;
-                        const total = (qty * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        const total = (qty * rate).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                         return (
                           <div
@@ -525,7 +525,7 @@ export const ExecutiveDashboard: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-2 shrink-0 ml-3">
                               <span className="font-semibold text-xs text-[#234D42]">
-                                ₹ / $ {total}
+                                ₹ {total}
                               </span>
                               <span className="px-1.5 py-0.2 rounded text-[10px] font-medium bg-[#e9f2ef] text-[#234D42]">
                                 {isTruck ? 'Dispatched' : 'Received'}
@@ -605,7 +605,7 @@ export const ExecutiveDashboard: React.FC = () => {
                   TOTAL DISPATCHED
                 </span>
                 <span className="text-xl font-semibold text-[#1a2522]">
-                  {totalTruckTonnage.toLocaleString()} MT
+                  {totalTruckTonnage.toLocaleString('en-IN')} MT
                 </span>
               </button>
 
@@ -624,7 +624,7 @@ export const ExecutiveDashboard: React.FC = () => {
                   INWARD STOCK
                 </span>
                 <span className="text-xl font-semibold text-[#234D42]">
-                  {totalIncomingTonnage.toLocaleString()} MT
+                  {totalIncomingTonnage.toLocaleString('en-IN')} MT
                 </span>
               </button>
 
@@ -701,7 +701,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 const isTruck = item.type === 'truck_log';
                 const qty = Number(item.details.quantity) || 0;
                 const rate = Number(isTruck ? item.details.rate : item.details.price) || 0;
-                const total = (qty * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const total = (qty * rate).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 const timeFormatted = new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
                 return (
@@ -726,7 +726,7 @@ export const ExecutiveDashboard: React.FC = () => {
                           {isEntry
                             ? `Meeting: ${item.details.personToMeet || '—'} • Purpose: ${item.details.purpose || '—'}`
                             : isTruck
-                            ? `Driver: ${item.details.driverName} • ${item.details.quantity} ${item.details.quantityUnit || 'MT'} @ $${item.details.rate}`
+                            ? `Driver: ${item.details.driverName} • ${item.details.quantity} ${item.details.quantityUnit || 'MT'} @ ₹${item.details.rate}`
                             : `Vendor: ${item.details.vendorName} • Trader: ${item.details.tradersCompany} • ${item.details.quantity} ${item.details.quantityUnit || 'MT'}`}
                         </p>
                       </div>
@@ -736,7 +736,7 @@ export const ExecutiveDashboard: React.FC = () => {
                       {!isEntry && (
                         <div className="text-right">
                           <span className="text-[9px] text-[#71817E] block uppercase font-medium">Total Amount</span>
-                          <span className="text-xs sm:text-sm font-semibold text-[#234D42]">₹ / $ {total}</span>
+                          <span className="text-xs sm:text-sm font-semibold text-[#234D42]">₹ {total}</span>
                         </div>
                       )}
                       <div className="text-right flex items-center gap-1 text-[11px] text-[#71817E] bg-[#f8faf9] px-2 py-0.5 rounded-lg border border-[#e8eeeb]">
