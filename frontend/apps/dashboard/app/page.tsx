@@ -1,10 +1,8 @@
+'use client';
+
 import React from 'react';
-import { LiveFeed } from '@shared/components/dashboard/LiveFeed';
+import { ExecutiveDashboard } from '@shared/components/dashboard/ExecutiveDashboard';
 
 export default function DashboardPage() {
-  return (
-    <div className="py-2">
-      <LiveFeed />
-    </div>
-  );
+  return <ExecutiveDashboard />;
 }

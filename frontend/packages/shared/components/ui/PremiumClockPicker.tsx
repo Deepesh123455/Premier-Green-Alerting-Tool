@@ -168,9 +168,9 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
 
       {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
-      {/* Floating Radial Clock Dropdown Modal */}
+      {/* Floating Radial Clock Dropdown Modal - Opens Above Input */}
       {isOpen && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0 z-50 mt-1.5 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-3xl shadow-2xl p-4 sm:p-5 animate-pop-in">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0 z-50 mb-2 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-3xl shadow-2xl p-4 sm:p-5 animate-pop-in">
           {/* Time Digital Banner & AM/PM Switcher */}
           <div className="flex items-center justify-between bg-[#f8faf9] border border-[#e2e8e5] p-2.5 sm:p-3 rounded-2xl mb-3 sm:mb-4">
             <div className="flex items-center gap-1 font-mono text-lg sm:text-xl font-black text-[#1a2522]">
