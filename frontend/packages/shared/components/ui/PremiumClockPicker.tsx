@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Clock } from 'lucide-react';
+import { Clock, Check } from 'lucide-react';
 import clsx from 'clsx';
 
 interface PremiumClockPickerProps {
@@ -20,8 +20,9 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
   error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<'hours' | 'minutes'>('hours');
   const containerRef = useRef<HTMLDivElement>(null);
+  const hourInputRef = useRef<HTMLInputElement>(null);
+  const minuteInputRef = useRef<HTMLInputElement>(null);
 
   // Parse 24-hr value into 12-hr format
   const parse24To12 = (val24: string) => {
@@ -30,8 +31,8 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
       const h = now.getHours();
       const m = now.getMinutes();
       return {
-        h12: h % 12 === 0 ? 12 : h % 12,
-        minutes: m,
+        h12Str: String(h % 12 === 0 ? 12 : h % 12).padStart(2, '0'),
+        minStr: String(m).padStart(2, '0'),
         ampm: h >= 12 ? ('PM' as const) : ('AM' as const),
       };
     }
@@ -39,32 +40,40 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
     const h24 = parseInt(hStr || '0', 10);
     const m = parseInt(mStr || '0', 10);
     return {
-      h12: h24 % 12 === 0 ? 12 : h24 % 12,
-      minutes: m,
+      h12Str: String(h24 % 12 === 0 ? 12 : h24 % 12).padStart(2, '0'),
+      minStr: String(m).padStart(2, '0'),
       ampm: h24 >= 12 ? ('PM' as const) : ('AM' as const),
     };
   };
 
   const parsed = parse24To12(value);
-  const [selectedHour, setSelectedHour] = useState(parsed.h12);
-  const [selectedMinute, setSelectedMinute] = useState(parsed.minutes);
+  const [inputHour, setInputHour] = useState(parsed.h12Str);
+  const [inputMinute, setInputMinute] = useState(parsed.minStr);
   const [ampm, setAmpm] = useState<'AM' | 'PM'>(parsed.ampm);
 
   useEffect(() => {
     const updated = parse24To12(value);
-    setSelectedHour(updated.h12);
-    setSelectedMinute(updated.minutes);
+    setInputHour(updated.h12Str);
+    setInputMinute(updated.minStr);
     setAmpm(updated.ampm);
   }, [value]);
 
-  // Convert 12-hr back to 24-hr string
-  const get24HourString = (h12: number, m: number, period: 'AM' | 'PM') => {
+  // Convert 12-hr to 24-hr string and broadcast
+  const syncTime = (hStr: string, mStr: string, period: 'AM' | 'PM') => {
+    let h12 = parseInt(hStr || '12', 10);
+    if (isNaN(h12) || h12 < 1) h12 = 12;
+    if (h12 > 12) h12 = 12;
+
+    let m = parseInt(mStr || '0', 10);
+    if (isNaN(m) || m < 0) m = 0;
+    if (m > 59) m = 59;
+
     let h24 = h12;
     if (period === 'PM' && h12 < 12) h24 += 12;
     if (period === 'AM' && h12 === 12) h24 = 0;
-    const hStr = String(h24).padStart(2, '0');
-    const mStr = String(m).padStart(2, '0');
-    return `${hStr}:${mStr}`;
+
+    const formatted24 = `${String(h24).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    onChange(formatted24);
   };
 
   // Close dropdown on outside click
@@ -82,24 +91,52 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
     };
   }, [isOpen]);
 
-  const handleSelectHour = (h: number) => {
-    setSelectedHour(h);
-    const new24 = get24HourString(h, selectedMinute, ampm);
-    onChange(new24);
-    // Smooth transition to minutes selection
-    setMode('minutes');
+  // Handle Hour typing
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '').slice(0, 2);
+    setInputHour(raw);
+
+    const num = parseInt(raw, 10);
+    if (!isNaN(num) && num >= 1 && num <= 12) {
+      syncTime(raw, inputMinute, ampm);
+      if (raw.length === 2 || num > 1) {
+        minuteInputRef.current?.focus();
+      }
+    }
   };
 
-  const handleSelectMinute = (m: number) => {
-    setSelectedMinute(m);
-    const new24 = get24HourString(selectedHour, m, ampm);
-    onChange(new24);
+  const handleHourBlur = () => {
+    let num = parseInt(inputHour, 10);
+    if (isNaN(num) || num < 1) num = 12;
+    if (num > 12) num = 12;
+    const padded = String(num).padStart(2, '0');
+    setInputHour(padded);
+    syncTime(padded, inputMinute, ampm);
+  };
+
+  // Handle Minute typing
+  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '').slice(0, 2);
+    setInputMinute(raw);
+
+    const num = parseInt(raw, 10);
+    if (!isNaN(num) && num >= 0 && num <= 59) {
+      syncTime(inputHour, raw, ampm);
+    }
+  };
+
+  const handleMinuteBlur = () => {
+    let num = parseInt(inputMinute, 10);
+    if (isNaN(num) || num < 0) num = 0;
+    if (num > 59) num = 59;
+    const padded = String(num).padStart(2, '0');
+    setInputMinute(padded);
+    syncTime(inputHour, padded, ampm);
   };
 
   const handleToggleAmpm = (period: 'AM' | 'PM') => {
     setAmpm(period);
-    const new24 = get24HourString(selectedHour, selectedMinute, period);
-    onChange(new24);
+    syncTime(inputHour, inputMinute, period);
   };
 
   const handleSetCurrentTime = () => {
@@ -107,33 +144,26 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
     const h = now.getHours();
     const m = now.getMinutes();
     const newAmpm = h >= 12 ? 'PM' : 'AM';
-    const newH12 = h % 12 === 0 ? 12 : h % 12;
-    setSelectedHour(newH12);
-    setSelectedMinute(m);
+    const newH12 = String(h % 12 === 0 ? 12 : h % 12).padStart(2, '0');
+    const newM = String(m).padStart(2, '0');
+
+    setInputHour(newH12);
+    setInputMinute(newM);
     setAmpm(newAmpm);
-    const hStr = String(h).padStart(2, '0');
-    const mStr = String(m).padStart(2, '0');
-    onChange(`${hStr}:${mStr}`);
+    syncTime(newH12, newM, newAmpm);
   };
 
-  // Format readable display: e.g. "01:25 PM"
-  const formattedDisplay = `${String(selectedHour).padStart(2, '0')}:${String(
-    selectedMinute
-  ).padStart(2, '0')} ${ampm}`;
+  const handleQuickPreset = (h: number, m: number, period: 'AM' | 'PM') => {
+    const hStr = String(h).padStart(2, '0');
+    const mStr = String(m).padStart(2, '0');
+    setInputHour(hStr);
+    setInputMinute(mStr);
+    setAmpm(period);
+    syncTime(hStr, mStr, period);
+  };
 
-  // Clock geometry
-  const radius = 75;
-  const centerX = 97;
-  const centerY = 97;
-
-  const hoursList = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  const minutesList = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-
-  // Calculate hand pointer angle
-  const activeAngle =
-    mode === 'hours'
-      ? (selectedHour % 12) * 30 // 360 / 12 = 30 deg
-      : selectedMinute * 6; // 360 / 60 = 6 deg
+  // Format readable display: e.g. "05:25 PM"
+  const formattedDisplay = `${inputHour || '12'}:${inputMinute || '00'} ${ampm}`;
 
   return (
     <div ref={containerRef} className="relative w-full flex flex-col space-y-1.5">
@@ -144,12 +174,12 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
         <span className="text-[10px] text-[#71817E] font-medium lowercase">IST</span>
       </label>
 
-      {/* Input Field Box */}
+      {/* Main Input Display Trigger */}
       <button
         type="button"
         onClick={() => {
           setIsOpen(!isOpen);
-          setMode('hours');
+          setTimeout(() => hourInputRef.current?.focus(), 50);
         }}
         className={clsx(
           'w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white text-left border rounded-xl text-sm transition-all duration-200 ease-out flex items-center justify-between shadow-xs cursor-pointer active:scale-[0.99]',
@@ -168,47 +198,66 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
 
       {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
-      {/* Floating Radial Clock Dropdown Modal - Opens Above Input */}
+      {/* Sleek Manual Typing Digital Time Picker (Opens Below Input) */}
       {isOpen && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0 z-50 mb-2 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-3xl shadow-2xl p-4 sm:p-5 animate-pop-in">
-          {/* Time Digital Banner & AM/PM Switcher */}
-          <div className="flex items-center justify-between bg-[#f8faf9] border border-[#e2e8e5] p-2.5 sm:p-3 rounded-2xl mb-3 sm:mb-4">
-            <div className="flex items-center gap-1 font-mono text-lg sm:text-xl font-black text-[#1a2522]">
-              <button
-                type="button"
-                onClick={() => setMode('hours')}
-                className={clsx(
-                  'px-2 py-1 rounded-xl transition-all duration-150 cursor-pointer',
-                  mode === 'hours'
-                    ? 'bg-[#234D42] text-white shadow-xs'
-                    : 'text-[#50635e] hover:bg-[#e9f2ef]'
-                )}
-              >
-                {String(selectedHour).padStart(2, '0')}
-              </button>
-              <span className="text-[#71817E]">:</span>
-              <button
-                type="button"
-                onClick={() => setMode('minutes')}
-                className={clsx(
-                  'px-2 py-1 rounded-xl transition-all duration-150 cursor-pointer',
-                  mode === 'minutes'
-                    ? 'bg-[#234D42] text-white shadow-xs'
-                    : 'text-[#50635e] hover:bg-[#e9f2ef]'
-                )}
-              >
-                {String(selectedMinute).padStart(2, '0')}
-              </button>
+        <div className="absolute top-full left-1/2 -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0 z-50 mt-2 w-[calc(100vw-2.5rem)] max-w-[280px] bg-white border border-[#d2ded8] rounded-2xl shadow-xl p-4 animate-pop-in">
+          <div className="text-center mb-2.5">
+            <span className="text-[10px] font-semibold text-[#71817E] uppercase tracking-wider">
+              Type Time Manually
+            </span>
+          </div>
+
+          {/* Digital Typing Inputs Container */}
+          <div className="flex items-center justify-between bg-[#f8faf9] border border-[#d2ded8] p-2.5 rounded-xl mb-3">
+            {/* Hour & Minute Manual Inputs */}
+            <div className="flex items-center gap-1.5 font-mono">
+              {/* Hour Input Box */}
+              <div className="flex flex-col items-center">
+                <input
+                  ref={hourInputRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={2}
+                  value={inputHour}
+                  onChange={handleHourChange}
+                  onBlur={handleHourBlur}
+                  placeholder="12"
+                  className="w-11 h-10 text-center text-lg font-bold text-[#1a2522] bg-white border border-[#d2ded8] focus:border-[#234D42] focus:ring-2 focus:ring-[#234D42]/20 rounded-lg outline-none transition-all"
+                />
+                <span className="text-[9px] text-[#71817E] font-sans font-medium mt-0.5">HH</span>
+              </div>
+
+              <span className="text-lg font-bold text-[#71817E] pb-3">:</span>
+
+              {/* Minute Input Box */}
+              <div className="flex flex-col items-center">
+                <input
+                  ref={minuteInputRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={2}
+                  value={inputMinute}
+                  onChange={handleMinuteChange}
+                  onBlur={handleMinuteBlur}
+                  placeholder="00"
+                  className="w-11 h-10 text-center text-lg font-bold text-[#1a2522] bg-white border border-[#d2ded8] focus:border-[#234D42] focus:ring-2 focus:ring-[#234D42]/20 rounded-lg outline-none transition-all"
+                />
+                <span className="text-[9px] text-[#71817E] font-sans font-medium mt-0.5">MM</span>
+              </div>
             </div>
 
-            {/* AM / PM Toggle */}
-            <div className="flex items-center bg-[#e9f2ef] p-1 rounded-xl border border-[#d2ded8] text-xs font-bold">
+            {/* AM / PM Switcher Pill */}
+            <div className="flex flex-col gap-1 bg-[#e9f2ef] p-1 rounded-xl border border-[#d2ded8] text-xs font-bold">
               <button
                 type="button"
                 onClick={() => handleToggleAmpm('AM')}
                 className={clsx(
-                  'px-2 py-1 rounded-lg transition-all duration-150 cursor-pointer',
-                  ampm === 'AM' ? 'bg-[#234D42] text-white shadow-xs' : 'text-[#50635e]'
+                  'px-2.5 py-1 rounded-lg transition-all duration-150 cursor-pointer text-center text-[11px]',
+                  ampm === 'AM'
+                    ? 'bg-[#234D42] text-white shadow-2xs font-extrabold'
+                    : 'text-[#50635e] hover:text-[#1a2522]'
                 )}
               >
                 AM
@@ -217,8 +266,10 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
                 type="button"
                 onClick={() => handleToggleAmpm('PM')}
                 className={clsx(
-                  'px-2 py-1 rounded-lg transition-all duration-150 cursor-pointer',
-                  ampm === 'PM' ? 'bg-[#234D42] text-white shadow-xs' : 'text-[#50635e]'
+                  'px-2.5 py-1 rounded-lg transition-all duration-150 cursor-pointer text-center text-[11px]',
+                  ampm === 'PM'
+                    ? 'bg-[#234D42] text-white shadow-2xs font-extrabold'
+                    : 'text-[#50635e] hover:text-[#1a2522]'
                 )}
               >
                 PM
@@ -226,101 +277,52 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
             </div>
           </div>
 
-          {/* Mode Title */}
-          <div className="text-center mb-2">
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#71817E] uppercase tracking-wider">
-              {mode === 'hours' ? 'Select Hour' : 'Select Minute'}
+          {/* Quick Preset Buttons */}
+          <div className="mb-3">
+            <span className="text-[9px] font-medium text-[#71817E] uppercase tracking-wider block mb-1.5">
+              Quick Shortcuts
             </span>
-          </div>
-
-          {/* Circular Radial Clock Face */}
-          <div className="relative w-[194px] h-[194px] mx-auto bg-[#f8faf9] border border-[#d2ded8] rounded-full shadow-inner flex items-center justify-center select-none">
-            {/* Center Pivot Point */}
-            <div className="w-2 h-2 rounded-full bg-[#234D42] z-20" />
-
-            {/* Animated Smooth Clock Hand Pointer */}
-            <div
-              className="absolute w-1 bg-[#234D42] origin-bottom pointer-events-none z-10 transition-transform duration-300"
-              style={{
-                height: `${radius - 12}px`,
-                bottom: '50%',
-                left: 'calc(50% - 2px)',
-                transform: `rotate(${activeAngle}deg)`,
-                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              {/* Hand Circle Tip */}
-              <div className="w-6 h-6 rounded-full bg-[#234D42] absolute -top-3 -left-2.5 shadow-xs" />
+            <div className="grid grid-cols-3 gap-1.5 text-[10px]">
+              <button
+                type="button"
+                onClick={() => handleQuickPreset(9, 0, 'AM')}
+                className="py-1 px-1.5 rounded-lg bg-[#f8faf9] hover:bg-[#e9f2ef] border border-[#e2e8e5] text-[#50635e] font-medium transition-colors"
+              >
+                09:00 AM
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickPreset(12, 0, 'PM')}
+                className="py-1 px-1.5 rounded-lg bg-[#f8faf9] hover:bg-[#e9f2ef] border border-[#e2e8e5] text-[#50635e] font-medium transition-colors"
+              >
+                12:00 PM
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickPreset(3, 30, 'PM')}
+                className="py-1 px-1.5 rounded-lg bg-[#f8faf9] hover:bg-[#e9f2ef] border border-[#e2e8e5] text-[#50635e] font-medium transition-colors"
+              >
+                03:30 PM
+              </button>
             </div>
-
-            {/* Hours Face (1 to 12) */}
-            {mode === 'hours' &&
-              hoursList.map((hour, index) => {
-                const angle = index * 30 * (Math.PI / 180) - Math.PI / 2;
-                const x = centerX + radius * Math.cos(angle) - 13;
-                const y = centerY + radius * Math.sin(angle) - 13;
-                const isSelected = selectedHour === hour;
-
-                return (
-                  <button
-                    key={hour}
-                    type="button"
-                    onClick={() => handleSelectHour(hour)}
-                    style={{ left: `${x}px`, top: `${y}px` }}
-                    className={clsx(
-                      'absolute w-6.5 h-6.5 rounded-full font-bold text-xs flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
-                      isSelected
-                        ? 'text-white font-black scale-110'
-                        : 'text-[#1a2522] hover:bg-[#e9f2ef]'
-                    )}
-                  >
-                    {hour}
-                  </button>
-                );
-              })}
-
-            {/* Minutes Face (00, 05, 10 ... 55) */}
-            {mode === 'minutes' &&
-              minutesList.map((minute, index) => {
-                const angle = index * 30 * (Math.PI / 180) - Math.PI / 2;
-                const x = centerX + radius * Math.cos(angle) - 13;
-                const y = centerY + radius * Math.sin(angle) - 13;
-                const isSelected = Math.abs(selectedMinute - minute) < 2.5;
-
-                return (
-                  <button
-                    key={minute}
-                    type="button"
-                    onClick={() => handleSelectMinute(minute)}
-                    style={{ left: `${x}px`, top: `${y}px` }}
-                    className={clsx(
-                      'absolute w-6.5 h-6.5 rounded-full font-bold text-[10px] font-mono flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
-                      isSelected
-                        ? 'text-white font-black scale-110'
-                        : 'text-[#1a2522] hover:bg-[#e9f2ef]'
-                    )}
-                  >
-                    {String(minute).padStart(2, '0')}
-                  </button>
-                );
-              })}
           </div>
 
-          {/* Quick Footer Action Buttons */}
-          <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-[#eef2f0] flex items-center justify-between text-xs">
+          {/* Footer Action Buttons */}
+          <div className="pt-2 border-t border-[#f0f4f2] flex items-center justify-between text-xs">
             <button
               type="button"
               onClick={handleSetCurrentTime}
-              className="font-bold text-[#234D42] hover:underline cursor-pointer"
+              className="font-semibold text-[#234D42] hover:underline cursor-pointer text-[11px]"
             >
               Current Time
             </button>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="font-bold bg-[#234D42] text-white px-3.5 py-1.5 rounded-xl shadow-xs hover:bg-[#1a3b32] transition-all duration-150 active:scale-95 cursor-pointer"
+              className="flex items-center gap-1 font-semibold bg-[#234D42] text-white px-3 py-1.5 rounded-xl shadow-2xs hover:bg-[#1a3b32] transition-all duration-150 active:scale-95 cursor-pointer text-xs"
             >
-              Done
+              <Check className="w-3.5 h-3.5" />
+              <span>Done</span>
             </button>
           </div>
         </div>

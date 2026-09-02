@@ -134,9 +134,9 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
 
       {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
-      {/* Floating Modern Responsive Calendar Dropdown - Opens Above Input */}
+      {/* Floating Modern Responsive Calendar Dropdown - Opens Below Input */}
       {isOpen && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50 mb-2 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-2xl shadow-2xl p-3.5 sm:p-4 animate-pop-in">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50 mt-2 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-2xl shadow-2xl p-3.5 sm:p-4 animate-pop-in">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <span className="font-bold text-sm text-[#1a2522]">

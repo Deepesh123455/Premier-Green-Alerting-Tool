@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   Truck,
   PackagePlus,
-  Radio,
   Clock,
   ChevronRight,
   Bell,
@@ -17,10 +16,8 @@ import {
   Users,
   Activity,
   Layers,
-  ExternalLink,
   Database,
   Wifi,
-  Smartphone
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useLiveEvents } from '../../hooks/useLiveEvents';
@@ -62,7 +59,7 @@ export const ExecutiveDashboard: React.FC = () => {
         />
       )}
 
-      {/* Left Sleek Sidebar */}
+      {/* Left Sleek Sidebar - Clean White Theme */}
       <aside
         className={clsx(
           'fixed lg:sticky top-0 left-0 z-50 h-screen w-60 bg-white border-r border-[#e8eeeb] flex flex-col justify-between transition-transform duration-300 ease-in-out',
@@ -70,25 +67,25 @@ export const ExecutiveDashboard: React.FC = () => {
         )}
       >
         <div className="flex flex-col h-full overflow-y-auto">
-          {/* Clean Sleek Logo Header */}
+          {/* Clean White Logo Header */}
           <div className="p-4 border-b border-[#f0f4f2]">
-            <div className="bg-[#234D42] text-white p-3 rounded-2xl flex items-center justify-between shadow-2xs">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
+                <div className="relative w-8 h-8 flex items-center justify-center shrink-0">
                   <Image
                     src="/logo.png"
                     alt="Premier Green Logo"
-                    width={28}
-                    height={28}
+                    width={32}
+                    height={32}
                     className="object-contain"
                     priority
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-sm tracking-tight text-white leading-tight">
+                  <span className="font-semibold text-sm tracking-tight text-[#1a2522] leading-tight">
                     Premier Green
                   </span>
-                  <span className="text-[10px] text-[#AAB6AE] font-normal leading-none mt-0.5">
+                  <span className="text-[10px] text-[#71817E] font-normal leading-none mt-0.5">
                     Operations Hub
                   </span>
                 </div>
@@ -96,7 +93,7 @@ export const ExecutiveDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden text-[#AAB6AE] hover:text-white"
+                className="lg:hidden text-[#71817E] hover:text-[#1a2522]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -104,7 +101,7 @@ export const ExecutiveDashboard: React.FC = () => {
           </div>
 
           {/* Navigation Links */}
-          <div className="px-3 py-4 space-y-5 flex-1">
+          <div className="px-3 py-4 space-y-6 flex-1">
             {/* Primary Section */}
             <div className="space-y-0.5">
               <button
@@ -193,53 +190,6 @@ export const ExecutiveDashboard: React.FC = () => {
                   {incomingReports.length}
                 </span>
               </button>
-            </div>
-
-            {/* Department Terminals Group */}
-            <div className="space-y-1.5">
-              <span className="px-3 text-[10px] font-medium uppercase tracking-wider text-[#AAB6AE]">
-                Terminal Links
-              </span>
-              <div className="space-y-0.5">
-                <a
-                  href="http://localhost:3001"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-[#60736f] hover:bg-[#f1f5f3] hover:text-[#234D42] transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="w-3 h-3 text-[#71817E]" />
-                    <span>Gate Terminal (3001)</span>
-                  </div>
-                  <ExternalLink className="w-2.5 h-2.5 text-[#AAB6AE]" />
-                </a>
-
-                <a
-                  href="http://localhost:3002"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-[#60736f] hover:bg-[#f1f5f3] hover:text-[#234D42] transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="w-3 h-3 text-[#71817E]" />
-                    <span>Truck Terminal (3002)</span>
-                  </div>
-                  <ExternalLink className="w-2.5 h-2.5 text-[#AAB6AE]" />
-                </a>
-
-                <a
-                  href="http://localhost:3003"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-[#60736f] hover:bg-[#f1f5f3] hover:text-[#234D42] transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="w-3 h-3 text-[#71817E]" />
-                    <span>Inward Terminal (3003)</span>
-                  </div>
-                  <ExternalLink className="w-2.5 h-2.5 text-[#AAB6AE]" />
-                </a>
-              </div>
             </div>
 
             {/* System Status Group */}
@@ -336,25 +286,31 @@ export const ExecutiveDashboard: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-[#71817E] font-normal">
-              Premier Green — Real-time gate visitor logs, weighbridge dispatches, and warehouse inward stock monitoring.
+              Click any KPI card below to filter the live operations stream by category.
             </p>
           </div>
 
-          {/* 5 KPI Metric Cards Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* 4 Clean Interactive Clickable KPI Metric Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Card 1: Total Alerts */}
             <button
               type="button"
               onClick={() => handleKpiFilter('all')}
               className={clsx(
-                'bg-white border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-150 cursor-pointer hover:shadow-xs active:scale-99',
+                'border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-200 cursor-pointer hover:shadow-xs active:scale-[0.98]',
                 filterType === 'all'
-                  ? 'border-[#234D42] ring-1 ring-[#234D42]/20'
-                  : 'border-[#e8eeeb] hover:border-[#234D42]/30'
+                  ? 'bg-[#e9f2ef]/40 border-[#234D42] ring-2 ring-[#234D42]/20 shadow-2xs'
+                  : 'bg-white border-[#e8eeeb] hover:border-[#234D42]/40 hover:bg-[#f8faf9]'
               )}
+              title="Click to show All Alerts"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-[#71817E]">
+                <span
+                  className={clsx(
+                    'text-[10px] sm:text-[11px] font-medium uppercase tracking-wider',
+                    filterType === 'all' ? 'text-[#234D42] font-semibold' : 'text-[#71817E]'
+                  )}
+                >
                   TOTAL ALERTS
                 </span>
                 <span className="p-1.5 rounded-lg bg-[#f8faf9] text-[#234D42] border border-[#eef2f0]">
@@ -371,14 +327,20 @@ export const ExecutiveDashboard: React.FC = () => {
               type="button"
               onClick={() => handleKpiFilter('entry_exit')}
               className={clsx(
-                'bg-white border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-150 cursor-pointer hover:shadow-xs active:scale-99',
+                'border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-200 cursor-pointer hover:shadow-xs active:scale-[0.98]',
                 filterType === 'entry_exit'
-                  ? 'border-[#234D42] ring-1 ring-[#234D42]/20'
-                  : 'border-[#e8eeeb] hover:border-[#234D42]/30'
+                  ? 'bg-[#e9f2ef]/40 border-[#234D42] ring-2 ring-[#234D42]/20 shadow-2xs'
+                  : 'bg-white border-[#e8eeeb] hover:border-[#234D42]/40 hover:bg-[#f8faf9]'
               )}
+              title="Click to filter by Gate Visitors"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-[#71817E]">
+                <span
+                  className={clsx(
+                    'text-[10px] sm:text-[11px] font-medium uppercase tracking-wider',
+                    filterType === 'entry_exit' ? 'text-[#234D42] font-semibold' : 'text-[#71817E]'
+                  )}
+                >
                   GATE VISITORS
                 </span>
                 <span className="p-1.5 rounded-lg bg-[#e9f2ef] text-[#234D42]">
@@ -395,14 +357,20 @@ export const ExecutiveDashboard: React.FC = () => {
               type="button"
               onClick={() => handleKpiFilter('truck_log')}
               className={clsx(
-                'bg-white border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-150 cursor-pointer hover:shadow-xs active:scale-99',
+                'border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-200 cursor-pointer hover:shadow-xs active:scale-[0.98]',
                 filterType === 'truck_log'
-                  ? 'border-[#234D42] ring-1 ring-[#234D42]/20'
-                  : 'border-[#e8eeeb] hover:border-[#234D42]/30'
+                  ? 'bg-[#e9f2ef]/40 border-[#234D42] ring-2 ring-[#234D42]/20 shadow-2xs'
+                  : 'bg-white border-[#e8eeeb] hover:border-[#234D42]/40 hover:bg-[#f8faf9]'
               )}
+              title="Click to filter by Truck Logs"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-[#71817E]">
+                <span
+                  className={clsx(
+                    'text-[10px] sm:text-[11px] font-medium uppercase tracking-wider',
+                    filterType === 'truck_log' ? 'text-[#234D42] font-semibold' : 'text-[#71817E]'
+                  )}
+                >
                   TRUCK LOGS
                 </span>
                 <span className="p-1.5 rounded-lg bg-[#f8faf9] text-[#234D42] border border-[#eef2f0]">
@@ -419,14 +387,20 @@ export const ExecutiveDashboard: React.FC = () => {
               type="button"
               onClick={() => handleKpiFilter('incoming_report')}
               className={clsx(
-                'bg-white border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-150 cursor-pointer hover:shadow-xs active:scale-99',
+                'border p-4 rounded-2xl flex flex-col justify-between text-left transition-all duration-200 cursor-pointer hover:shadow-xs active:scale-[0.98]',
                 filterType === 'incoming_report'
-                  ? 'border-[#234D42] ring-1 ring-[#234D42]/20'
-                  : 'border-[#e8eeeb] hover:border-[#234D42]/30'
+                  ? 'bg-[#e9f2ef]/40 border-[#234D42] ring-2 ring-[#234D42]/20 shadow-2xs'
+                  : 'bg-white border-[#e8eeeb] hover:border-[#234D42]/40 hover:bg-[#f8faf9]'
               )}
+              title="Click to filter by Inward Stock"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-[#71817E]">
+                <span
+                  className={clsx(
+                    'text-[10px] sm:text-[11px] font-medium uppercase tracking-wider',
+                    filterType === 'incoming_report' ? 'text-[#234D42] font-semibold' : 'text-[#71817E]'
+                  )}
+                >
                   INWARD STOCK
                 </span>
                 <span className="p-1.5 rounded-lg bg-[#f8faf9] text-[#234D42] border border-[#eef2f0]">
@@ -437,21 +411,6 @@ export const ExecutiveDashboard: React.FC = () => {
                 {incomingReports.length}
               </div>
             </button>
-
-            {/* Card 5: Active Terminals */}
-            <div className="col-span-2 sm:col-span-1 bg-white border border-[#e8eeeb] p-4 rounded-2xl flex flex-col justify-between">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-[#71817E]">
-                  TERMINALS
-                </span>
-                <span className="p-1.5 rounded-lg bg-[#e9f2ef] text-[#234D42]">
-                  <Radio className="w-3.5 h-3.5" />
-                </span>
-              </div>
-              <div className="text-2xl sm:text-3xl font-semibold text-[#234D42] tracking-tight">
-                3
-              </div>
-            </div>
           </div>
 
           {/* Middle Row: 2-Column Split */}
@@ -629,43 +588,83 @@ export const ExecutiveDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* 4 Activity Summary Metric Cards */}
+            {/* 4 Interactive Clickable Activity Summary Metric Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-xl bg-[#f8faf9] border border-[#e8eeeb]">
+              <button
+                type="button"
+                onClick={() => handleKpiFilter('truck_log')}
+                className={clsx(
+                  'p-3.5 rounded-xl border text-left transition-all duration-150 cursor-pointer active:scale-98',
+                  filterType === 'truck_log'
+                    ? 'bg-[#e9f2ef]/50 border-[#234D42] ring-1 ring-[#234D42]/20'
+                    : 'bg-[#f8faf9] border-[#e8eeeb] hover:border-[#234D42]/30 hover:bg-[#f1f5f3]'
+                )}
+                title="Click to filter by Truck Dispatches"
+              >
                 <span className="text-[10px] font-medium uppercase tracking-wider text-[#71817E] block mb-0.5">
                   TOTAL DISPATCHED
                 </span>
                 <span className="text-xl font-semibold text-[#1a2522]">
                   {totalTruckTonnage.toLocaleString()} MT
                 </span>
-              </div>
+              </button>
 
-              <div className="p-3.5 rounded-xl bg-[#f8faf9] border border-[#e8eeeb]">
+              <button
+                type="button"
+                onClick={() => handleKpiFilter('incoming_report')}
+                className={clsx(
+                  'p-3.5 rounded-xl border text-left transition-all duration-150 cursor-pointer active:scale-98',
+                  filterType === 'incoming_report'
+                    ? 'bg-[#e9f2ef]/50 border-[#234D42] ring-1 ring-[#234D42]/20'
+                    : 'bg-[#f8faf9] border-[#e8eeeb] hover:border-[#234D42]/30 hover:bg-[#f1f5f3]'
+                )}
+                title="Click to filter by Inward Stock"
+              >
                 <span className="text-[10px] font-medium uppercase tracking-wider text-[#71817E] block mb-0.5">
                   INWARD STOCK
                 </span>
                 <span className="text-xl font-semibold text-[#234D42]">
                   {totalIncomingTonnage.toLocaleString()} MT
                 </span>
-              </div>
+              </button>
 
-              <div className="p-3.5 rounded-xl bg-[#f8faf9] border border-[#e8eeeb]">
+              <button
+                type="button"
+                onClick={() => handleKpiFilter('entry_exit')}
+                className={clsx(
+                  'p-3.5 rounded-xl border text-left transition-all duration-150 cursor-pointer active:scale-98',
+                  filterType === 'entry_exit'
+                    ? 'bg-[#e9f2ef]/50 border-[#234D42] ring-1 ring-[#234D42]/20'
+                    : 'bg-[#f8faf9] border-[#e8eeeb] hover:border-[#234D42]/30 hover:bg-[#f1f5f3]'
+                )}
+                title="Click to filter by Visitor Check-Ins"
+              >
                 <span className="text-[10px] font-medium uppercase tracking-wider text-[#71817E] block mb-0.5">
                   GATE CHECK-INS
                 </span>
                 <span className="text-xl font-semibold text-[#354541]">
                   {entryExitLogs.length} Visitors
                 </span>
-              </div>
+              </button>
 
-              <div className="p-3.5 rounded-xl bg-[#f8faf9] border border-[#e8eeeb]">
+              <button
+                type="button"
+                onClick={() => handleKpiFilter('all')}
+                className={clsx(
+                  'p-3.5 rounded-xl border text-left transition-all duration-150 cursor-pointer active:scale-98',
+                  filterType === 'all'
+                    ? 'bg-[#e9f2ef]/50 border-[#234D42] ring-1 ring-[#234D42]/20'
+                    : 'bg-[#f8faf9] border-[#e8eeeb] hover:border-[#234D42]/30 hover:bg-[#f1f5f3]'
+                )}
+                title="Click to show All Real-Time Broadcasts"
+              >
                 <span className="text-[10px] font-medium uppercase tracking-wider text-[#71817E] block mb-0.5">
                   LIVE BROADCASTS
                 </span>
                 <span className="text-xl font-semibold text-[#234D42]">
                   100% Real-Time
                 </span>
-              </div>
+              </button>
             </div>
 
             {/* Live Event Cards Feed */}
@@ -680,7 +679,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     onClick={() => handleKpiFilter('all')}
                     className="text-xs font-medium text-[#234D42] hover:underline cursor-pointer"
                   >
-                    Reset Filter
+                    Reset Filter (Show All)
                   </button>
                 )}
               </div>
