@@ -1,0 +1,7 @@
+{
+  "name": "premier-green-alerting-frontend",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ]
+}
