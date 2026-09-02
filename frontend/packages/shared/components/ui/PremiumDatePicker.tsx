@@ -118,7 +118,7 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
-          'w-full px-4 py-3 bg-white text-left border rounded-xl text-sm transition-all duration-200 ease-out flex items-center justify-between shadow-xs cursor-pointer active:scale-[0.99]',
+          'w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white text-left border rounded-xl text-sm transition-all duration-200 ease-out flex items-center justify-between shadow-xs cursor-pointer active:scale-[0.99]',
           isOpen
             ? 'border-[#234D42] ring-2 ring-[#234D42]/20'
             : error
@@ -126,17 +126,17 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
             : 'border-[#d2ded8] hover:border-[#AAB6AE]'
         )}
       >
-        <span className={clsx('font-medium', value ? 'text-[#1a2522]' : 'text-[#AAB6AE]')}>
+        <span className={clsx('font-medium text-xs sm:text-sm truncate', value ? 'text-[#1a2522]' : 'text-[#AAB6AE]')}>
           {formattedDisplay}
         </span>
-        <CalendarIcon className="w-4 h-4 text-[#234D42]" />
+        <CalendarIcon className="w-4 h-4 text-[#234D42] shrink-0 ml-2" />
       </button>
 
       {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
-      {/* Floating Modern Calendar Dropdown */}
+      {/* Floating Modern Responsive Calendar Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-1.5 w-72 bg-white border border-[#d2ded8] rounded-2xl shadow-xl p-4 animate-pop-in">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50 mt-1.5 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-2xl shadow-2xl p-3.5 sm:p-4 animate-pop-in">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <span className="font-bold text-sm text-[#1a2522]">
@@ -146,14 +146,14 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
               <button
                 type="button"
                 onClick={handlePrevMonth}
-                className="p-1 rounded-lg hover:bg-[#e9f2ef] text-[#234D42] transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-[#e9f2ef] text-[#234D42] transition-colors cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={handleNextMonth}
-                className="p-1 rounded-lg hover:bg-[#e9f2ef] text-[#234D42] transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-[#e9f2ef] text-[#234D42] transition-colors cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -170,7 +170,7 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
           {/* Days Grid */}
           <div className="grid grid-cols-7 gap-1 text-xs">
             {Array.from({ length: firstDayIndex }).map((_, i) => (
-              <div key={`empty-${i}`} className="h-8" />
+              <div key={`empty-${i}`} className="h-7 sm:h-8" />
             ))}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1;
@@ -184,7 +184,7 @@ export const PremiumDatePicker: React.FC<PremiumDatePickerProps> = ({
                   type="button"
                   onClick={() => handleSelectDay(day)}
                   className={clsx(
-                    'h-8 w-8 mx-auto rounded-full font-bold flex items-center justify-center transition-all duration-150 ease-out text-xs cursor-pointer',
+                    'h-7 w-7 sm:h-8 sm:w-8 mx-auto rounded-full font-bold flex items-center justify-center transition-all duration-150 ease-out text-xs cursor-pointer',
                     isSelected
                       ? 'bg-[#234D42] text-white shadow-xs'
                       : isToday

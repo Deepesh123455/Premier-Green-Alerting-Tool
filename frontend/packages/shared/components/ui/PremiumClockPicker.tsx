@@ -122,9 +122,9 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
   ).padStart(2, '0')} ${ampm}`;
 
   // Clock geometry
-  const radius = 80;
-  const centerX = 105;
-  const centerY = 105;
+  const radius = 75;
+  const centerX = 97;
+  const centerY = 97;
 
   const hoursList = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   const minutesList = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
@@ -141,7 +141,7 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
         <span>
           {label} {required && <span className="text-[#234D42]">*</span>}
         </span>
-        <span className="text-[10px] text-[#71817E] font-medium lowercase">indian standard time</span>
+        <span className="text-[10px] text-[#71817E] font-medium lowercase">IST</span>
       </label>
 
       {/* Input Field Box */}
@@ -152,7 +152,7 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
           setMode('hours');
         }}
         className={clsx(
-          'w-full px-4 py-3 bg-white text-left border rounded-xl text-sm transition-all duration-200 ease-out flex items-center justify-between shadow-xs cursor-pointer active:scale-[0.99]',
+          'w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white text-left border rounded-xl text-sm transition-all duration-200 ease-out flex items-center justify-between shadow-xs cursor-pointer active:scale-[0.99]',
           isOpen
             ? 'border-[#234D42] ring-2 ring-[#234D42]/20'
             : error
@@ -160,20 +160,20 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
             : 'border-[#d2ded8] hover:border-[#AAB6AE]'
         )}
       >
-        <span className="font-semibold text-[#1a2522] tracking-wide">
+        <span className="font-semibold text-xs sm:text-sm text-[#1a2522] tracking-wide truncate">
           {formattedDisplay}
         </span>
-        <Clock className="w-4 h-4 text-[#234D42]" />
+        <Clock className="w-4 h-4 text-[#234D42] shrink-0 ml-2" />
       </button>
 
       {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
       {/* Floating Radial Clock Dropdown Modal */}
       {isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-1.5 w-72 bg-white border border-[#d2ded8] rounded-3xl shadow-2xl p-5 animate-pop-in">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0 z-50 mt-1.5 w-[calc(100vw-2.5rem)] max-w-[280px] sm:max-w-none sm:w-72 bg-white border border-[#d2ded8] rounded-3xl shadow-2xl p-4 sm:p-5 animate-pop-in">
           {/* Time Digital Banner & AM/PM Switcher */}
-          <div className="flex items-center justify-between bg-[#f8faf9] border border-[#e2e8e5] p-3 rounded-2xl mb-4">
-            <div className="flex items-center gap-1 font-mono text-xl font-black text-[#1a2522]">
+          <div className="flex items-center justify-between bg-[#f8faf9] border border-[#e2e8e5] p-2.5 sm:p-3 rounded-2xl mb-3 sm:mb-4">
+            <div className="flex items-center gap-1 font-mono text-lg sm:text-xl font-black text-[#1a2522]">
               <button
                 type="button"
                 onClick={() => setMode('hours')}
@@ -228,15 +228,15 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
 
           {/* Mode Title */}
           <div className="text-center mb-2">
-            <span className="text-[11px] font-bold text-[#71817E] uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[#71817E] uppercase tracking-wider">
               {mode === 'hours' ? 'Select Hour' : 'Select Minute'}
             </span>
           </div>
 
           {/* Circular Radial Clock Face */}
-          <div className="relative w-[210px] h-[210px] mx-auto bg-[#f8faf9] border border-[#d2ded8] rounded-full shadow-inner flex items-center justify-center select-none">
+          <div className="relative w-[194px] h-[194px] mx-auto bg-[#f8faf9] border border-[#d2ded8] rounded-full shadow-inner flex items-center justify-center select-none">
             {/* Center Pivot Point */}
-            <div className="w-2.5 h-2.5 rounded-full bg-[#234D42] z-20" />
+            <div className="w-2 h-2 rounded-full bg-[#234D42] z-20" />
 
             {/* Animated Smooth Clock Hand Pointer */}
             <div
@@ -250,15 +250,15 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
               }}
             >
               {/* Hand Circle Tip */}
-              <div className="w-7 h-7 rounded-full bg-[#234D42] absolute -top-3.5 -left-3 shadow-xs" />
+              <div className="w-6 h-6 rounded-full bg-[#234D42] absolute -top-3 -left-2.5 shadow-xs" />
             </div>
 
             {/* Hours Face (1 to 12) */}
             {mode === 'hours' &&
               hoursList.map((hour, index) => {
                 const angle = index * 30 * (Math.PI / 180) - Math.PI / 2;
-                const x = centerX + radius * Math.cos(angle) - 14;
-                const y = centerY + radius * Math.sin(angle) - 14;
+                const x = centerX + radius * Math.cos(angle) - 13;
+                const y = centerY + radius * Math.sin(angle) - 13;
                 const isSelected = selectedHour === hour;
 
                 return (
@@ -268,7 +268,7 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
                     onClick={() => handleSelectHour(hour)}
                     style={{ left: `${x}px`, top: `${y}px` }}
                     className={clsx(
-                      'absolute w-7 h-7 rounded-full font-bold text-xs flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
+                      'absolute w-6.5 h-6.5 rounded-full font-bold text-xs flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
                       isSelected
                         ? 'text-white font-black scale-110'
                         : 'text-[#1a2522] hover:bg-[#e9f2ef]'
@@ -283,8 +283,8 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
             {mode === 'minutes' &&
               minutesList.map((minute, index) => {
                 const angle = index * 30 * (Math.PI / 180) - Math.PI / 2;
-                const x = centerX + radius * Math.cos(angle) - 14;
-                const y = centerY + radius * Math.sin(angle) - 14;
+                const x = centerX + radius * Math.cos(angle) - 13;
+                const y = centerY + radius * Math.sin(angle) - 13;
                 const isSelected = Math.abs(selectedMinute - minute) < 2.5;
 
                 return (
@@ -294,7 +294,7 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
                     onClick={() => handleSelectMinute(minute)}
                     style={{ left: `${x}px`, top: `${y}px` }}
                     className={clsx(
-                      'absolute w-7 h-7 rounded-full font-bold text-[11px] font-mono flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
+                      'absolute w-6.5 h-6.5 rounded-full font-bold text-[10px] font-mono flex items-center justify-center transition-all duration-150 z-20 cursor-pointer',
                       isSelected
                         ? 'text-white font-black scale-110'
                         : 'text-[#1a2522] hover:bg-[#e9f2ef]'
@@ -307,7 +307,7 @@ export const PremiumClockPicker: React.FC<PremiumClockPickerProps> = ({
           </div>
 
           {/* Quick Footer Action Buttons */}
-          <div className="mt-4 pt-3 border-t border-[#eef2f0] flex items-center justify-between text-xs">
+          <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-[#eef2f0] flex items-center justify-between text-xs">
             <button
               type="button"
               onClick={handleSetCurrentTime}
