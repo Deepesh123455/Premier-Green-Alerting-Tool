@@ -9,6 +9,8 @@ import { entryExitSchema, EntryExitFormData } from '../../schemas/entryExitSchem
 import { useSubmitEntryExit } from '../../hooks/useSubmitEntryExit';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
+import { PremiumDatePicker } from '../ui/PremiumDatePicker';
+import { PremiumClockPicker } from '../ui/PremiumClockPicker';
 
 export const EntryExitForm: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -17,6 +19,8 @@ export const EntryExitForm: React.FC = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<EntryExitFormData>({
     resolver: zodResolver(entryExitSchema),
@@ -30,6 +34,9 @@ export const EntryExitForm: React.FC = () => {
   });
 
   const { mutate, isPending, error } = useSubmitEntryExit();
+
+  const visitDate = watch('visitDate');
+  const visitTime = watch('visitTime');
 
   const onSubmit = (data: EntryExitFormData) => {
     setSuccessMessage(null);
@@ -50,6 +57,7 @@ export const EntryExitForm: React.FC = () => {
 
   return (
     <div className="w-full max-w-lg mx-auto bg-white border border-[#e2e8e5] rounded-3xl p-6 sm:p-8 shadow-xl shadow-[#71817E]/5">
+      {/* Header */}
       <div className="flex items-center justify-between pb-6 border-b border-[#eef2f0]">
         <div className="flex items-center gap-3">
           <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
@@ -77,14 +85,14 @@ export const EntryExitForm: React.FC = () => {
       </div>
 
       {successMessage && (
-        <div className="mt-6 p-4 rounded-2xl bg-[#e9f2ef] border border-[#234D42]/30 text-[#1a3b32] text-sm flex items-center gap-3">
+        <div className="mt-6 p-4 rounded-2xl bg-[#e9f2ef] border border-[#234D42]/30 text-[#1a3b32] text-sm flex items-center gap-3 animate-pop-in">
           <CheckCircle2 className="w-5 h-5 shrink-0 text-[#234D42]" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="mt-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center gap-3">
+        <div className="mt-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center gap-3 animate-pop-in">
           <AlertCircle className="w-5 h-5 shrink-0 text-rose-600" />
           <span>{(error as Error).message || 'Failed to submit entry log'}</span>
         </div>
@@ -99,20 +107,21 @@ export const EntryExitForm: React.FC = () => {
           {...register('visitorName')}
         />
 
+        {/* Clean Date Picker & Smooth Radial Clock Picker side-by-side */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
+          <PremiumDatePicker
             label="Visit Date"
-            type="date"
+            value={visitDate}
+            onChange={(d) => setValue('visitDate', d, { shouldValidate: true })}
             required
             error={errors.visitDate?.message}
-            {...register('visitDate')}
           />
-          <Input
+          <PremiumClockPicker
             label="Visit Time"
-            type="time"
+            value={visitTime}
+            onChange={(t) => setValue('visitTime', t, { shouldValidate: true })}
             required
             error={errors.visitTime?.message}
-            {...register('visitTime')}
           />
         </div>
 

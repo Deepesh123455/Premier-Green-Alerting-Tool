@@ -91,14 +91,14 @@ export const IncomingReportForm: React.FC = () => {
       </div>
 
       {successMessage && (
-        <div className="mt-6 p-4 rounded-2xl bg-[#e9f2ef] border border-[#234D42]/30 text-[#1a3b32] text-sm flex items-center gap-3">
+        <div className="mt-6 p-4 rounded-2xl bg-[#e9f2ef] border border-[#234D42]/30 text-[#1a3b32] text-sm flex items-center gap-3 animate-pop-in">
           <CheckCircle2 className="w-5 h-5 shrink-0 text-[#234D42]" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="mt-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center gap-3">
+        <div className="mt-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center gap-3 animate-pop-in">
           <AlertCircle className="w-5 h-5 shrink-0 text-rose-600" />
           <span>{(error as Error).message || 'Failed to submit incoming report'}</span>
         </div>
@@ -135,14 +135,14 @@ export const IncomingReportForm: React.FC = () => {
         </div>
 
         {/* Live Computed Total Field */}
-        <div className="p-3.5 rounded-2xl bg-[#f8faf9] border border-[#d2ded8] flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-[#f8faf9] border border-[#d2ded8] flex items-center justify-between transition-all duration-300 ease-out hover:border-[#234D42]/40 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#71817E]">
             <Calculator className="w-4 h-4 text-[#234D42]" />
             <span>Computed Inward Total:</span>
           </div>
           <div className="text-right">
             {computedTotal ? (
-              <span className="text-base font-extrabold text-[#234D42]">
+              <span className="text-base font-extrabold text-[#234D42] animate-pop-in inline-block">
                 ₹ / $ {computedTotal}
               </span>
             ) : (
