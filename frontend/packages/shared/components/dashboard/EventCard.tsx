@@ -17,7 +17,7 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
 
   if (type === 'entry_exit') {
     return (
-      <div className="bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-5 shadow-sm transition-all duration-200">
+      <div className="animate-slide-down bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out">
         <div className="flex items-center justify-between gap-2 border-b border-[#eef2f0] pb-3 mb-3">
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-[#e9f2ef] text-[#234D42] border border-[#234D42]/20">
@@ -62,7 +62,7 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
     const computedTotal = (qty * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     return (
-      <div className="bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-5 shadow-sm transition-all duration-200">
+      <div className="animate-slide-down bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-[#234D42]/40 rounded-2xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out">
         <div className="flex items-center justify-between gap-2 border-b border-[#eef2f0] pb-3 mb-3">
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-[#e9f2ef] text-[#234D42] border border-[#d2ded8]">
@@ -113,7 +113,7 @@ export const EventCard: React.FC<EventCardProps> = ({ item }) => {
   const computedTotal = (qty * price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
-    <div className="bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-amber-500/40 rounded-2xl p-5 shadow-sm transition-all duration-200">
+    <div className="animate-slide-down bg-white hover:bg-[#fcfdfd] border border-[#e2e8e5] hover:border-amber-500/40 rounded-2xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out">
       <div className="flex items-center justify-between gap-2 border-b border-[#eef2f0] pb-3 mb-3">
         <div className="flex items-center gap-2.5">
           <span className="p-2 rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
