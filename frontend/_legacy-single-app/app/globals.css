@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8faf9;
+  --foreground: #1a2522;
+  --pg-pine: #234D42;
+  --pg-sage: #71817E;
+  --pg-mist: #AAB6AE;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(170, 182, 174, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(35, 77, 66, 0.08) 0px, transparent 50%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  min-height: 100vh;
+}
+
+/* Remove default number input spinner arrows */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f3;
+}
+::-webkit-scrollbar-thumb {
+  background: #AAB6AE;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #234D42;
+}
